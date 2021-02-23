@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+    compiler:
+        container_name: compile-testdata
+        build:
+            context: ./cxt
+            dockerfile: pod/opensuse
+        restart: always
+        tty: true
+        privileged: true
+        environment:
+            SERVICE_TAGS: dev
+            SERVICE_NAME: testdata
+            DISPLAY: ":0"
+        volumes:
+            - ./src:/root/project
+            - ./var/stack-work:/root/project/.stack-work
+            - ./var/stack:/root/.stack
+            - /home/dragonfly/.Xauthority:/root/.Xauthority
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ./cxt/cnf/script/stack:/usr/local/bin/stack
+        networks:
+            - networktestdata
+        #entrypoint:
+        #    - bin/bash
+        #    - -i
+
+networks:
+    networktestdata:
+        driver: bridge
+

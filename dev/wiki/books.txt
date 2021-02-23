@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.6
+Creation-Date: 2020-12-31T23:53:36+10:00
+
+====== books ======
+
+* [[https://b-ok.asia/book/2799859/ff1671|Practical Forensic Imaging, Securing Digital Evidence with Linux Tools]]
+* [[https://b-ok.asia/book/3517317/0c3dad|Digital Forensics]]
+* [[https://b-ok.asia/book/1111915/971917|Digital Forensics With Open Source Tools]]
+* [[https://b-ok.asia/book/5457091/1dd724|Digital Forensics With Kali Linux]]
+* [[https://b-ok.asia/book/1311894/b334dc|Violent Python]]
+* [[https://b-ok.asia/book/3675622/5c7a08|Seeking the Truth from Mobile Evidence]]
+* [[https://b-ok.asia/book/5009186/b5d219|Cybercrime and Digital Forensics]]
+* [[https://b-ok.asia/book/5222797/29b54d|Digital Forensic Education]]
+* [[https://b-ok.asia/book/640388/1e1a8d|Open Source Software for Digital Forensics]]
+* [[https://b-ok.asia/book/1304578/3bd054|Network Forensics]]
+* [[https://b-ok.asia/book/2781008/b8351b|Learning Network Forensics]]
+* [[https://b-ok.asia/book/5220066/bdf3b3|Network Forensics]]
+* [[https://b-ok.asia/book/3659314/8a91b4|Cracking Codes with Python]]
