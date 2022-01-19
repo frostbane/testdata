@@ -1,4 +1,4 @@
-project=compile-testdata
+project=testdata
 
 main: stop build start exec
 
@@ -31,7 +31,7 @@ exec:
 	@podman exec -it $(project) bash || true
 
 stop:
-	@if [[ -n "$$(podman images -q $(project))" ]]; then podman pod stop $(project); fi
+	@if [[ -n "$$(podman images -q $(project))" ]]; then podman stop $(project); fi
 	@podman ps -a
 
 list:

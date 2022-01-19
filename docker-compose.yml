@@ -2,16 +2,16 @@ version: '3.3'
 
 services:
     compiler:
-        container_name: compile-testdata
+        container_name: testdata-compiler
         build:
             context: ./cxt
-            dockerfile: pod/opensuse
+            dockerfile: pod/haskell.dockerfile
         restart: always
         tty: true
-        privileged: true
+        env_file: .env
         environment:
             SERVICE_TAGS: dev
-            SERVICE_NAME: testdata
+            SERVICE_NAME: compiler
             DISPLAY: ":0"
         volumes:
             - ./src:/root/project
@@ -19,9 +19,37 @@ services:
             - ./var/stack:/root/.stack
             - /home/dragonfly/.Xauthority:/root/.Xauthority
             - /tmp/.X11-unix:/tmp/.X11-unix
-            - ./cxt/cnf/script/stack:/usr/local/bin/stack
+            #- ./cxt/cnf/script/stack:/usr/local/bin/stack
+        cap_add:
+            - SYS_PTRACE
         networks:
             - networktestdata
+        #entrypoint:
+        #    - bin/bash
+        #    - -i
+
+    persistence:
+        container_name: testdata-persistence
+        build:
+            context: ./cxt
+            dockerfile: pod/postgresql.dockerfile
+        restart: always
+        tty: true
+        env_file: .env
+        environment:
+            SERVICE_TAGS: dev
+            SERVICE_NAME: persistence
+            DISPLAY: ":0"
+        volumes:
+            - ./var/data:/var/data
+            - ./cxt/cnf/postgresql.conf:/etc/postgres/conf.d/00.conf
+        ports:
+            #- "${EXT_PORT}:${INT_PORT}"
+            - "5432:5433"
+        networks:
+            - networktestdata
+        cap_add:
+            - SYS_PTRACE
         #entrypoint:
         #    - bin/bash
         #    - -i
