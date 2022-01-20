@@ -59,7 +59,17 @@ build/*
 
 # stack generated files/folders
 .stack-work/*
+.stack-work-devel/*
 stack.yaml.lock
+*.cabal
+*.hi
+*.o
+.hsenv*
+cabal-dev/*
+yesod-devel/*
+.cabal-sandbox
+cabal.sandbox.config
+test.cabal
 
 # npm generated files/folders
 node_modules/*
@@ -135,5 +145,16 @@ storage/*.key
 *.user
 *.sln.docstates
 
+########################################################################
+
 cxt/cnf/script/stack
-*.cabal
+dist*
+src/static/tmp/*
+src/static/combined/*
+src/config/client_session_key.aes
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.swp
+*.keter
+\#*

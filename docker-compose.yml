@@ -13,6 +13,9 @@ services:
             SERVICE_TAGS: dev
             SERVICE_NAME: compiler
             DISPLAY: ":0"
+        ports:
+            #- "${EXT_PORT}:${INT_PORT}"
+            - "3000:3000"
         volumes:
             - ./src:/root/project
             - ./var/stack-work:/root/project/.stack-work
