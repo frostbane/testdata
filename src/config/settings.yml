@@ -32,7 +32,7 @@ database:
   user:     "_env:YESOD_PGUSER:postgres"
   password: "_env:YESOD_PGPASS:postgres"
   host:     "_env:YESOD_PGHOST:persistence"
-  port:     "_env:YESOD_PGPORT:5433"
+  port:     "_env:YESOD_PGPORT:5432"
   # See config/test-settings.yml for an override during tests
   database: "_env:YESOD_PGDATABASE:postgres"
   poolsize: "_env:YESOD_PGPOOLSIZE:10"
