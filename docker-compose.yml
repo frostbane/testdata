@@ -44,11 +44,37 @@ services:
             SERVICE_NAME: persistence
             DISPLAY: ":0"
         volumes:
-            - ./var/data:/var/data
+            - ./var/postgre:/var/data
             - ./cxt/cnf/postgresql.conf:/etc/postgres/conf.d/00.conf
         ports:
             #- "${EXT_PORT}:${INT_PORT}"
             - "5432:5433"
+        networks:
+            - networktestdata
+        cap_add:
+            - SYS_PTRACE
+        #entrypoint:
+        #    - bin/bash
+        #    - -i
+
+    persistence2:
+        container_name: testdata-persistence2
+        build:
+            context: ./cxt
+            dockerfile: pod/mysql.dockerfile
+        restart: always
+        tty: true
+        env_file: .env
+        environment:
+            SERVICE_TAGS: dev
+            SERVICE_NAME: persistence2
+            DISPLAY: ":0"
+        volumes:
+            - ./var/mysql:/var/lib/mysql
+            - ./cxt/cnf/mysql.conf:/etc/my.cnf.d/00.conf
+        ports:
+            #- "${EXT_PORT}:${INT_PORT}"
+            - "3310:3306"
         networks:
             - networktestdata
         cap_add:
