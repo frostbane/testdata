@@ -4,13 +4,15 @@
 
 ## Setup ##
 
+yesod will not build when using powershell as your shell
+
 create a project
 
 ```sh
 $ stack new some-project yesodweb/postgres
 ```
 
-build yesod cli tool
+build yesod cli tool (maybe optional?)
 
 ```sh
 $ stack install yesod-bin
