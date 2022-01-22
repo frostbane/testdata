@@ -7,6 +7,7 @@ RUN dnf install -y              \
         postgresql-contrib      \
         libpq-devel
 
-RUN dnf install -y              \
-        community-mysql-devel   \
-        community-mysql
+#RUN dnf install -y              \
+#        community-mysql-devel   \
+#        community-mysql
+
