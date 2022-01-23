@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -55,6 +56,18 @@ import Handler.Profile
 -- comments there for more details.
 mkYesodDispatch "App" resourcesApp
 
+-- | run database migrations
+-- runMigrations :: Data.Pool.Pool -> b -> IO ()
+runMigrations pool logFunc = do
+    let files = [ "config/migrations/000-db_migrations.sql"
+                , "config/migrations/001-user.sql"
+                ]
+    sqlFiles <- mapM readFile files
+    mapM executeWithLog sqlFiles
+        where
+            decodeAndExecute dbMigrationsSql = rawExecute (Data.Text.Encoding.decodeUtf8 dbMigrationsSql) []
+            executeWithLog migrationSql = runLoggingT (runSqlPool (decodeAndExecute migrationSql) pool ) logFunc
+
 -- | This function allocates resources (such as a database connection pool),
 -- performs initialization and returns a foundation datatype value. This is also
 -- the place to put your migrate statements to have automatic database
@@ -87,8 +100,7 @@ makeFoundation appSettings = do
         (pgPoolSize $ appDatabaseConf appSettings)
 
     -- Perform database migration using our application's logging settings.
-    dbMigrationsSql <- readFile "config/migrations/00-db_migrations.sql"
-    runLoggingT (runSqlPool (rawExecute (Data.Text.Encoding.decodeUtf8 dbMigrationsSql) []) pool ) logFunc
+    _ <- runMigrations pool logFunc
     runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
 
     -- Return the foundation
