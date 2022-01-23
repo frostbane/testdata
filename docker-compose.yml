@@ -22,7 +22,7 @@ services:
             - ./var/stack:/root/.stack
             - /home/dragonfly/.Xauthority:/root/.Xauthority
             - /tmp/.X11-unix:/tmp/.X11-unix
-            #- ./cxt/cnf/script/stack:/usr/local/bin/stack
+            - ./cxt/cnf/script:/root/script
         cap_add:
             - SYS_PTRACE
         networks:
