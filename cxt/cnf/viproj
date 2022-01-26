@@ -1,0 +1,101 @@
+~/testdata=~/testdata cd=. {
+ .
+ .env
+ .env-example
+ .hgignore
+ Makefile
+ README.md
+ docker-compose.yml
+
+ src
+ src cd=src/src {
+  .
+  Application.hs
+  Foundation.hs
+  Import.hs
+  Model.hs
+  Settings.hs
+
+  Handlers cd=Handler filter="**" {
+   Comment.hs
+   Common.hs
+   Home.hs
+   Profile.hs
+  }
+
+  Imports cd=Import filter="**" {
+   NoFoundation.hs
+  }
+
+  Settings cd=Settings filter="**" {
+   StaticFiles.hs
+  }
+ }
+
+ config cd=src/config filter="**" {
+  client_session_key.aes
+  favicon.ico
+  keter.yml
+  migrations/000-db_migrations.sql
+  migrations/001-user.sql
+  models.persistentmodels
+  robots.txt
+  routes.yesodroutes
+  settings.yml
+  test-settings.yml
+ }
+
+ static cd=src/static filter="**" {
+  css/bootstrap.css
+  fonts/glyphicons-halflings-regular.eot
+  fonts/glyphicons-halflings-regular.svg
+  fonts/glyphicons-halflings-regular.ttf
+  fonts/glyphicons-halflings-regular.woff
+  tmp/autogen--WGprJGy.css
+  tmp/autogen-PE46a7-4.css
+  tmp/autogen-r3XaZuvR.js
+ }
+
+templates cd=src/templates filter="**" {
+  default-layout-wrapper.hamlet
+  default-layout.hamlet
+  default-layout.lucius
+  homepage.hamlet
+  homepage.julius
+  homepage.lucius
+  profile.hamlet
+ }
+
+ tests cd=src/test filter="**" {
+  Handler/CommentSpec.hs
+  Handler/CommonSpec.hs
+  Handler/HomeSpec.hs
+  Handler/ProfileSpec.hs
+  Spec.hs
+  TestImport.hs
+ }
+
+ infrastructure cd=cxt {
+  .
+  config cd=cnf filter="**" {
+   _user.config
+   mysql.conf
+   postgresql.conf
+   script/00-database.sql
+   script/stack
+  }
+  pod cd=pod filter="**" {
+   haskell.dockerfile
+   mysql.dockerfile
+   postgresql.dockerfile
+  }
+ }
+
+ dev
+ dev cd=dev filter="ref/**, spec/**, wiki/**"{
+  wiki/books.txt
+  wiki/dev.notebook
+  wiki/jargon.txt
+ }
+
+}
