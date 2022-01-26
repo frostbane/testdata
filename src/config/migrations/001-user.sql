@@ -16,7 +16,7 @@ $$
             end;
             insert into "db_migrations" values (filename);
         else
-            raise notice 'already executed, skipping', filename;
+            raise notice '%d already executed, skipping', filename;
         end if;
     end
 $$
