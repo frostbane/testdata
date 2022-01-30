@@ -32,6 +32,7 @@ database:
   user:     "_env:YESOD_PGUSER:testdata"
   password: "_env:YESOD_PGPASS:a7a2E"
   host:     "_env:YESOD_PGHOST:persistence"
+  #host:     "_env:YESOD_PGHOST:127.0.0.1"
   port:     "_env:YESOD_PGPORT:5432"
   # See config/test-settings.yml for an override during tests
   database: "_env:YESOD_PGDATABASE:testdata"
