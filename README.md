@@ -6,19 +6,29 @@
 
 yesod will not build when using powershell as your shell
 
-create a project
+**create a project**
 
 ```sh
 $ stack new some-project yesodweb/postgres
 ```
 
-build yesod cli tool (maybe optional?)
+stack templates
+
+- minimal
+- mongo
+- mysql
+- postgres
+- simple
+- sqlite
+
+**build yesod cli tool (maybe optional?)**
 
 ```sh
 $ stack install yesod-bin
 ```
 
-build project
+**build project**
+
 ```sh
 $ cd some-proj
 $ stack build

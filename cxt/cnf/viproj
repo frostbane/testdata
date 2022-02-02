@@ -1,4 +1,4 @@
-~/testdata=~/testdata cd=. {
+testdata=~/my\ projects/testdata CD=. {
  .
  .env
  .env-example
@@ -6,6 +6,7 @@
  Makefile
  README.md
  docker-compose.yml
+ kubernetes.yml
 
  src
  src cd=src/src {
