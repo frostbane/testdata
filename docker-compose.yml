@@ -20,6 +20,7 @@ services:
             - ./src:/root/project
             - ./var/stack-work:/root/project/.stack-work
             - ./var/stack:/root/.stack
+            - ./var:/root/var
             - /home/dragonfly/.Xauthority:/root/.Xauthority
             - /tmp/.X11-unix:/tmp/.X11-unix
             - ./cxt/cnf/script:/root/script

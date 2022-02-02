@@ -1,5 +1,8 @@
 project=testdata
 
+dummy:
+	@echo -n ""
+
 main: stop build start exec
 
 build:
@@ -10,7 +13,7 @@ no-cache:
 	podman-compose build --no-cache
 	@podman images
 
-clean:
+clean: .cleantags
 	@podman pod stop $(project)
 	@podman rm $(project)
 	@podman rmi $(project)
@@ -37,3 +40,11 @@ stop:
 list:
 	podman container ls -a
 
+diff:
+	hg extdiff --program diffuse --per-file
+
+.cleantags:
+	@rm -f tags
+tags: .cleantags
+	@fast-tags -R --fully-qualified --exclude=var .
+	fast-tags -R --qualified --exclude=var .
