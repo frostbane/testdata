@@ -2,11 +2,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
+
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# OPTIONS_GHC -fno-warn-partial-type-signatures #-}
+
 module Application
     ( getApplicationDev
     , appMain
@@ -21,27 +25,34 @@ module Application
     , db
     ) where
 
-import Control.Monad.Logger                 (liftLoc, runLoggingT)
-import Database.Persist.Postgresql          (    createPostgresqlPool
-                                               , pgConnStr
-                                               , pgPoolSize
-                                               , runSqlPool
-                                               , rawExecute
-                                             )
+import Control.Monad.Logger ( liftLoc
+                            , runLoggingT)
+import Database.Persist.Postgresql ( createPostgresqlPool
+                                   , pgConnStr
+                                   , pgPoolSize
+                                   , runSqlPool
+                                   , rawExecute)
 import Import
-import Language.Haskell.TH.Syntax           (qLocation)
-import Network.HTTP.Client.TLS              (getGlobalManager)
+import Language.Haskell.TH.Syntax (qLocation)
+import Network.HTTP.Client.TLS    (getGlobalManager)
 import Network.Wai (Middleware)
-import Network.Wai.Handler.Warp             (Settings, defaultSettings,
-                                             defaultShouldDisplayException,
-                                             runSettings, setHost,
-                                             setOnException, setPort, getPort)
-import Network.Wai.Middleware.RequestLogger (Destination (Logger),
-                                             IPAddrSource (..),
-                                             OutputFormat (..), destination,
-                                             mkRequestLogger, outputFormat)
-import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
-                                             toLogStr)
+import Network.Wai.Handler.Warp ( Settings
+                                , defaultSettings
+                                , defaultShouldDisplayException
+                                , runSettings
+                                , setHost
+                                , setOnException
+                                , setPort
+                                , getPort)
+import Network.Wai.Middleware.RequestLogger ( Destination (Logger)
+                                            , IPAddrSource (..)
+                                            , OutputFormat (..)
+                                            , destination
+                                            , mkRequestLogger
+                                            , outputFormat)
+import System.Log.FastLogger ( defaultBufSize
+                             , newStdoutLoggerSet
+                             , toLogStr)
 import Data.Text.Encoding
 
 -- Import all relevant handler modules here.
@@ -56,17 +67,22 @@ import Handler.Profile
 -- comments there for more details.
 mkYesodDispatch "App" resourcesApp
 
--- | run database migrations
--- runMigrations :: Data.Pool.Pool -> b -> IO ()
+{- | run database migrations
+
+-}
+runMigrations :: _ -> _ -> IO ()
 runMigrations pool logFunc = do
-    let files = [ "config/migrations/000-db_migrations.sql"
-                , "config/migrations/001-user.sql"
-                ]
-    sqlFiles <- mapM readFile files
-    mapM executeWithLog sqlFiles
-        where
-            decodeAndExecute dbMigrationsSql = rawExecute (Data.Text.Encoding.decodeUtf8 dbMigrationsSql) []
-            executeWithLog migrationSql = runLoggingT (runSqlPool (decodeAndExecute migrationSql) pool ) logFunc
+    let
+        files =
+            [ "config/migrations/000-db_migrations.sql"
+            , "config/migrations/001-user.sql"
+            ]
+    mapM readFile files
+        >>= mapM executeWithLog
+        >> return ()
+  where
+    decodeAndExecute dbMigrationsSql = rawExecute (Data.Text.Encoding.decodeUtf8 dbMigrationsSql) []
+    executeWithLog migrationSql = runLoggingT (runSqlPool (decodeAndExecute migrationSql) pool ) logFunc
 
 -- | This function allocates resources (such as a database connection pool),
 -- performs initialization and returns a foundation datatype value. This is also
