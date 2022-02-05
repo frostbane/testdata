@@ -78,6 +78,14 @@ executables:
     - condition: flag(library-only)
       buildable: false
 
+  zipCodeParser:
+    main: Main.hs
+    source-dirs: tools/zip
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+
 # Test suite
 tests:
   test-test:
