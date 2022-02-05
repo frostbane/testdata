@@ -21,10 +21,16 @@ stack templates
 - simple
 - sqlite
 
-**build yesod cli tool (maybe optional?)**
+**build yesod cli tool (optional)**
 
 ```sh
 $ stack install yesod-bin
+```
+
+`package.yaml` already specifies the `build-tools` and are accessible through:
+
+```sh
+$ stack exec yesod
 ```
 
 **build project**
