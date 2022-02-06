@@ -1,5 +1,5 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE OverloadedStrings    #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# OPTIONS
    -Wall
@@ -16,17 +16,19 @@ import System.IO
       stdin,
       stdout,
       utf8,
+      IOMode (ReadMode, WriteMode),
     )
 import Data.Typeable (typeOf)
 import qualified Data.Text as T
 import Data.Text.IO (hPutStrLn)
+import Control.Monad.IO.Class (liftIO)
 
 
-import Csv
+import           Csv
 import Arguments
 
-{- | Initialize encoding
-    -}
+-- | Initialize encoding
+--   initialize the envoding to utf8
 initEncoding :: IO ()
 initEncoding = hSetEncoding stdin utf8
                     >> hSetEncoding stdout utf8
@@ -59,20 +61,54 @@ printArguments ms =
         Nothing   -> return [()]
         Just list -> mapM putStrLn list
 
+{- | Check if an argument is provided
+    -}
+checkArgument :: ()
+              => Maybe T.Text
+              -> Either T.Text T.Text
+checkArgument mArgument =
+  case mArgument of
+      Nothing  -> Left $ T.pack "Invalid or missing arguments."
+      Just arg -> Right arg
 
 {- | stack run csv <file>
    -}
 main :: IO ()
 main = do
-    initEncoding
-    arguments <- getArguments
+    arguments <- getArguments <* initEncoding
     -- putStrLn $ T.pack $ show $ typeOf arguments
+
     let fileName = (get1stArgument . normalizeArguments) arguments
-    case fileName of
-        Nothing -> showHelp
-        Just f  -> do
-            checkResult <- checkFileExist f
-            case checkResult of
-                Left err -> putStrLn err >> showHelp
-                Right _  -> putStrLn $ T.pack $ show fileName
+
+    -- case fileName of
+    --     Nothing -> showHelp
+    --     Just f  -> do
+    --         checkResult <- checkFileExist $ Right f
+    --         case checkResult of
+    --             Left err -> putStrLn err >> putStrLn "" >> showHelp
+    --             Right _  -> do
+    --                 openResult <- openCsvFile checkResult ReadMode
+    --                 case openResult of
+    --                     Left err -> putStrLn err >> putStrLn "" >> showHelp
+    --                     Right _  -> do
+    --                         case openResult of
+    --                             Left err -> putStrLn err >> putStrLn "" >> showHelp
+    --                             Right _  -> do
+    --                                 parseResult <- parse openResult
+    --                                 case parseResult of
+    --                                     Left err -> putStrLn err >> putStrLn "" >> showHelp
+    --                                     Right _  -> do
+    --                                         putStrLn $ T.pack $ show fileName
+    --                                         closeCsvFile openResult
+    --                                         return ()
+
+    result <-  closeCsvFile
+           =<< parse
+           =<< flip openCsvFile ReadMode
+           -- =<< checkFileExist =<< return (checkArgument fileName)
+           =<< (checkFileExist . checkArgument) fileName
+
+    case result of
+        Left err -> putStrLn err >> putStrLn "" >> showHelp
+        Right _  -> putStrLn $ T.pack $ show fileName
 
