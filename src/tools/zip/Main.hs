@@ -18,14 +18,17 @@ import System.IO
       utf8,
       IOMode (ReadMode, WriteMode),
     )
-import Data.Typeable (typeOf)
+import Data.Typeable
+    ( typeOf,
+      Typeable,
+    )
 import qualified Data.Text as T
 import Data.Text.IO (hPutStrLn)
 import Control.Monad.IO.Class (liftIO)
 
-
-import           Csv
+import Csv
 import Arguments
+
 
 -- | Initialize encoding
 --   initialize the envoding to utf8
@@ -41,6 +44,10 @@ putStrLn :: T.Text -> IO ()
 putStrLn str = do
     hPutStrLn stdout str
     -- Prelude.putStrLn $ T.unpack str
+
+-- | Print the provided argument's type
+putTypeOfLn :: (Typeable a) => a -> IO ()
+putTypeOfLn =  putStrLn . T.pack . show . typeOf
 
 showHelp :: IO ()
 showHelp = do
@@ -76,39 +83,17 @@ checkArgument mArgument =
 main :: IO ()
 main = do
     arguments <- getArguments <* initEncoding
-    -- putStrLn $ T.pack $ show $ typeOf arguments
+    -- putTypeOfLn arguments
 
     let fileName = (get1stArgument . normalizeArguments) arguments
 
-    -- case fileName of
-    --     Nothing -> showHelp
-    --     Just f  -> do
-    --         checkResult <- checkFileExist $ Right f
-    --         case checkResult of
-    --             Left err -> putStrLn err >> putStrLn "" >> showHelp
-    --             Right _  -> do
-    --                 openResult <- openCsvFile checkResult ReadMode
-    --                 case openResult of
-    --                     Left err -> putStrLn err >> putStrLn "" >> showHelp
-    --                     Right _  -> do
-    --                         case openResult of
-    --                             Left err -> putStrLn err >> putStrLn "" >> showHelp
-    --                             Right _  -> do
-    --                                 parseResult <- parse openResult
-    --                                 case parseResult of
-    --                                     Left err -> putStrLn err >> putStrLn "" >> showHelp
-    --                                     Right _  -> do
-    --                                         putStrLn $ T.pack $ show fileName
-    --                                         closeCsvFile openResult
-    --                                         return ()
+    csvHandle <-  flip openCsvFile ReadMode
+              =<< (checkFileExist . checkArgument) fileName
 
-    result <-  closeCsvFile
-           =<< parse
-           =<< flip openCsvFile ReadMode
-           -- =<< checkFileExist =<< return (checkArgument fileName)
-           =<< (checkFileExist . checkArgument) fileName
+    parseResult <- parse csvHandle
+    case parseResult of
+        Left  err         -> putStrLn err >> putStrLn "" >> showHelp
+        Right parsedLines -> mapM_ putStrLn parsedLines
 
-    case result of
-        Left err -> putStrLn err >> putStrLn "" >> showHelp
-        Right _  -> putStrLn $ T.pack $ show fileName
+    closeCsvFile csvHandle >> return ()
 

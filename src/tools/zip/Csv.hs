@@ -1,10 +1,12 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
+{-# LANGUAGE PartialTypeSignatures #-}
 {-# OPTIONS
    -Wall
    -Wno-unused-imports
    -Wno-unused-top-binds
+   -fno-warn-partial-type-signatures
  #-}
 
 
@@ -24,7 +26,9 @@ import System.Directory
     )
 import System.IO
     ( openFile,
+      hGetLine,
       hClose,
+      hIsEOF,
       Handle,
       IOMode (ReadMode, WriteMode),
     )
@@ -55,8 +59,8 @@ checkFileExist eiFileName = do
         Right fileName -> do
             exist <- doesFileExist $ T.unpack fileName
             if not exist
-               then return $ Left $ "'" <> fileName <> "' file does not exist."
-               else return $ Right fileName
+                then return $ Left $ "'" <> fileName <> "' file does not exist."
+                else return $ Right fileName
 
 openCsvFile :: ()
          => Either T.Text T.Text      -- ^ either previous error or filename
@@ -74,25 +78,53 @@ openCsvFile eiFileName mode = do
           where
                 filePath = T.unpack fileName
 
+procIfRight :: ()
+            => (b -> Either a c)
+            -> Either a b
+            -> Either a c
+procIfRight f e =
+    case e of
+        Left err -> Left err
+        Right b  -> f b
+
 closeCsvFile :: ()
              => Either T.Text Handle
              -> IO (Either T.Text (IO ()))
 closeCsvFile eiHandle = do
-    return closeFileHandle
+    return $ procIfRight closeFileHandle eiHandle
   where
-        closeFileHandle = do
-            case eiHandle of
-                Left err     -> Left err
-                Right handle -> Right $ hClose handle
+        closeFileHandle :: ()
+                        => Handle
+                        -> Either T.Text (IO ())
+        closeFileHandle handle = Right $ hClose handle
 
 parse :: ()
       => Either T.Text Handle
-      -> IO (Either T.Text Handle)
+      -> IO (Either T.Text [T.Text])
 parse eiHandle = do
-    return parseFile
+    case eiHandle of
+        Left err -> return $ Left err
+        Right handle -> parseFile handle
   where
-        parseFile = do
-            case eiHandle of
-                Left err     -> Left err
-                Right handle -> Right handle
+        parseFile :: ()
+                  => Handle
+                  -> IO (Either T.Text [T.Text])
+        parseFile handle = do
+            parseResult <- try (parseLine handle $ return ([] :: [T.Text])) :: IO (Either SomeException _)
+            return $ case parseResult of
+                Left ex      -> Left $ T.pack $ displayException ex
+                Right result -> Right result
+
+        parseLine :: ()
+                  => Handle
+                  -> IO [T.Text]
+                  -> IO [T.Text]
+        parseLine handle acc = do
+            isEnd <- hIsEOF handle
+            if isEnd
+                then acc
+                else do
+                    currentLines <- acc
+                    line         <- T.pack <$> hGetLine handle
+                    parseLine handle $ return $ currentLines ++ [line]
 
