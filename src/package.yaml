@@ -85,6 +85,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    dependencies:
+    - cassava >= 0.5.1.0
 
 # Test suite
 tests:
