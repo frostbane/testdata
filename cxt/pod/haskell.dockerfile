@@ -1,11 +1,13 @@
-FROM nodetransit/fedora-haskell:latest
+FROM nodetransit/opensuse-haskell:latest
 
 WORKDIR /root/project
 
-RUN dnf install -y              \
-        postgresql              \
-        postgresql-contrib      \
-        libpq-devel
+RUN zypper install -y                \
+           postgresql14              \
+           postgresql14-contrib      \
+           postgresql14-server       \
+           postgresql14-server-devel \
+           libpqxx-devel
 
 #RUN dnf install -y              \
 #        community-mysql-devel   \
