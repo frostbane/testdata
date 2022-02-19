@@ -21,7 +21,9 @@ stack templates
 - simple
 - sqlite
 
-**build yesod cli tool (optional)**
+** **build yesod cli tool **
+
+this installs yesod at `~/.local/bin`, make sure that it is in your `%PATH`
 
 ```sh
 $ stack install yesod-bin

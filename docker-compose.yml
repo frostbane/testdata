@@ -17,13 +17,13 @@ services:
             #- "${EXT_PORT}:${INT_PORT}"
             - "3000:3000"
         volumes:
-            - ./src:/root/project
-            - ./var/stack-work:/root/project/.stack-work
-            - ./var/stack:/root/.stack
-            - ./var:/root/var
-            - /home/dragonfly/.Xauthority:/root/.Xauthority
-            - /tmp/.X11-unix:/tmp/.X11-unix
-            - ./cxt/cnf/script:/root/script
+            - ./src:/root/project:z
+            - ./var/stack-work:/root/project/.stack-work:z
+            - ./var/stack:/root/.stack:z
+            - ./var:/root/var:z
+            - /home/dragonfly/.Xauthority:/root/.Xauthority:z
+            - /tmp/.X11-unix:/tmp/.X11-unix:ro
+            - ./cxt/cnf/script:/root/script:z
         cap_add:
             - SYS_PTRACE
         networks:
@@ -45,8 +45,8 @@ services:
             SERVICE_NAME: persistence
             DISPLAY: ":0"
         volumes:
-            - ./var/postgres:/var/data
-            - ./cxt/cnf/postgresql.conf:/etc/postgres/conf.d/00.conf
+            - ./var/postgres:/var/data:z
+            - ./cxt/cnf/postgresql.conf:/etc/postgres/conf.d/00.conf:z
         ports:
             #- "${EXT_PORT}:${INT_PORT}"
             - "5432:5432"
