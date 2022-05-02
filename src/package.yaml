@@ -1,4 +1,4 @@
-name:    test
+name:    testdata
 version: "0.0.0"
 
 dependencies:
@@ -73,7 +73,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - test
+    - testdata
     when:
     - condition: flag(library-only)
       buildable: false
@@ -87,6 +87,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - cassava >= 0.5.1.0
+    - bytestring-trie >= 0.2.5.0
 
 # Test suite
 tests:
@@ -95,7 +96,7 @@ tests:
     source-dirs: test
     ghc-options: -Wall
     dependencies:
-    - test
+    - testdata
     - hspec >=2.0.0
     - yesod-test
 
