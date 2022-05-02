@@ -160,3 +160,6 @@ src/config/client_session_key.aes
 \#*
 syntax: glob
 tags
+src/output/*
+src/.spago/*
+src/.purs-repl

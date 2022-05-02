@@ -1,4 +1,4 @@
-project=testdata
+project=testdata-compiler
 
 dummy:
 	@echo -n ""
@@ -14,14 +14,14 @@ no-cache:
 	@podman images
 
 clean: .cleantags
-	@podman pod stop $(project)
+	@podman stop $(project)
 	@podman rm $(project)
 	@podman rmi $(project)
 	@rm -rf .stack-work
 
 run:
 	#podman-compose up
-	podman pod start $(project)
+	podman start $(project)
 
 start:
 	#podman-compose up -d
@@ -31,7 +31,7 @@ start:
 	podman ps -a
 
 exec:
-	@podman exec -it $(project) bash || true
+	@podman exec -it $(project) pwsh || true
 
 stop:
 	@if [[ -n "$$(podman images -q $(project))" ]]; then podman stop $(project); fi
