@@ -22,7 +22,6 @@ var/*
 cache/*
 log/*
 extern/*
-lib/*
 logs/*
 docs/*
 obj/*
