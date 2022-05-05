@@ -14,11 +14,8 @@ import Network.Wai
 
 app :: IO Middleware
 app = do
-    conf <- Server.createSpockCfg Controllers.errorLog Controllers.error
-    let handlers = [ Controllers.development
-                   , Controllers.static
-                   , Controllers.basic
-                   ]
+    conf     <- Server.getSpockConfig Controllers.errorLog Controllers.error
+    handlers <- Server.getControllers
     spock conf $ foldl (>>) (head handlers) (tail handlers)
 
 main :: IO ()

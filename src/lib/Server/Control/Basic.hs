@@ -5,13 +5,13 @@ module Server.Control.Basic
     ) where
 
 import Web.Spock
-import Network.Wai.Middleware.Static
+import Web.Spock.Lucid (lucid)
+import Lucid
 import Data.Text (Text)
 
 
 
 handler :: SpockM () () () ()
 handler = do
-    get ("hello" <//> var) $
-        \name -> do
-            text ("Hello " <> name)
+    get root $ lucid $ do
+        h4_ "testdata"

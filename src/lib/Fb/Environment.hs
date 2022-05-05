@@ -69,6 +69,8 @@ loadEnv env = do
 {-| get environment variable value or use default if not foun
 
     environment key is case sensitived
+
+    environment strings must be wrapped in quotes
     -}
 getEnvDefault :: (Read a)
               => String    -- ^ environment key
@@ -77,5 +79,6 @@ getEnvDefault :: (Read a)
 getEnvDefault key def = coalesce =<< lookupEnv key
   where
     coalesce result = case result of
+        --Just val -> return $ fromMaybe def $ fromMaybe (readMaybe ("\"" ++ val ++ "\"")) $ readMaybe val
         Just val -> return $ fromMaybe def $ readMaybe val
         Nothing  -> return def
