@@ -46,7 +46,6 @@ getControllers = do
     let extra = if | env == "development" -> [Controllers.development]
                    | env == "staging"     -> []
                    | otherwise            -> []
-    putStrLn $ show env
     return $ app ++ extra
 
 {- | get port from environment or the default 80 if it is not set
