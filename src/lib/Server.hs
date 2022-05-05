@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Server
-    ( createSpockCfg
+    ( initialize
+    , createSpockCfg
     , getHttpPort
     ) where
 
@@ -11,6 +12,11 @@ import Web.Spock.Config
 import Data.Text (Text)
 import qualified Network.HTTP.Types.Status as Http
 
+
+initialize :: IO()
+initialize = do
+    loadEnv ".env"
+    return ()
 
 createSpockCfg :: (Text -> IO())
                -> (Http.Status -> ActionCtxT () IO ())
@@ -31,8 +37,4 @@ createSpockCfg errLogger errHandler = do
      make sure the HTTP_PORT value is an integer
     -}
 getHttpPort :: IO Int
-getHttpPort = do
-    loadEnv ".env"
-    val <- getEnvDefault "HTTP_PORT" "80"
-    let port = read val :: Int
-    return port
+getHttpPort = getEnvDefault "HTTP_PORT" 80
