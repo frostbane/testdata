@@ -33,6 +33,7 @@ dependencies:
 - text
 - mtl
 - wai
+- wai-extra
 - path-pieces
 - stache
 - lucid

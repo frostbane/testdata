@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Server.Actions.Basic
+module Server.Control.Static
     ( handler
     ) where
 
@@ -12,9 +12,5 @@ import Data.Text (Text)
 
 handler :: SpockM () () () ()
 handler = do
-
     middleware $ staticPolicy (addBase "static")
-
-    get ("hello" <//> var) $
-        \name -> do
-            text ("Hello " <> name)
+    middleware $ staticPolicy (addBase "public")

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Server.Actions.ErrorLogger
+module Server.Control.ErrorLogger
     ( handler
     ) where
 
