@@ -19,5 +19,6 @@ middleware = do
 
 main :: IO ()
 main = do
+    Server.initialize
     port <- Server.getHttpPort
     runSpock port middleware

@@ -23,6 +23,8 @@ import Control.Exception ( try
                          )
 import qualified Data.Text as T
 import Data.Text (Text)
+import Data.Maybe (fromMaybe)
+import Text.Read (readMaybe)
 
 
 splitPair :: String -> (String, String)
@@ -68,11 +70,12 @@ loadEnv env = do
 
     environment key is case sensitived
     -}
-getEnvDefault :: String    -- ^ environment key
-              -> String    -- ^ default value if key is not found
-              -> IO String
+getEnvDefault :: (Read a)
+              => String    -- ^ environment key
+              -> a         -- ^ default value if key is not found
+              -> IO a
 getEnvDefault key def = coalesce =<< lookupEnv key
   where
     coalesce result = case result of
-        Just val -> return val
+        Just val -> return $ fromMaybe def $ readMaybe val
         Nothing  -> return def
