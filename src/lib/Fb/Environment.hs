@@ -4,6 +4,7 @@
 module Fb.Environment
     ( loadEnv
     , getEnvDefault
+    , quoteunquote
     ) where
 
 import Prelude
@@ -23,7 +24,7 @@ import Control.Exception ( try
                          )
 import qualified Data.Text as T
 import Data.Text (Text)
-import Data.Maybe (fromMaybe)
+import Data.List
 import Text.Read (readMaybe)
 
 
@@ -69,8 +70,6 @@ loadEnv env = do
 {-| get environment variable value or use default if not foun
 
     environment key is case sensitived
-
-    environment strings must be wrapped in quotes
     -}
 getEnvDefault :: (Read a)
               => String    -- ^ environment key
@@ -79,6 +78,25 @@ getEnvDefault :: (Read a)
 getEnvDefault key def = coalesce =<< lookupEnv key
   where
     coalesce result = case result of
-        --Just val -> return $ fromMaybe def $ fromMaybe (readMaybe ("\"" ++ val ++ "\"")) $ readMaybe val
-        Just val -> return $ fromMaybe def $ readMaybe val
-        Nothing  -> return def
+        Just val -> return $ do
+            case readMaybe val of
+                Just v -> v
+                _      -> do
+                    case readMaybe (quoteunquote val) of
+                        Just qv -> qv
+                        _       -> def
+        _        -> return def
+
+{- | quote an unquoted string , unquote a quoted string
+    -}
+quoteunquote :: String -> String
+quoteunquote str
+    | isquoted str = drop 1 $ take (length str - 1) str
+    | otherwise    = "\"" ++ str ++ "\""
+  where
+    quote = "\""
+
+    isquoted :: String -> Bool
+    isquoted s = length s >= 2 &&
+                 quote `isPrefixOf` s &&
+                 quote `isSuffixOf` s
