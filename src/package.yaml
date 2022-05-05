@@ -32,6 +32,7 @@ dependencies:
 - http-types
 - text
 - mtl
+- wai
 - path-pieces
 - stache
 - lucid
