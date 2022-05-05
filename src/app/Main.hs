@@ -9,28 +9,34 @@ import Lib
 import Web.Spock
 import Web.Spock.Config
 import Network.Wai.Middleware.Static
+import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Network.HTTP.Types.Status as Http
 
-main :: IO ()
-main = do
-    sess <- defaultSessionCfg ()
-    let cfg = SpockCfg ()
-                   PCNoDatabase
-                   sess
-                   (Just 512000)
-                   errHandler
-                   errLogger
-                   True
-                   "x-akane"
-                   "x-akane"
-
-    runSpock 3000 $ spock cfg app
+createSpockCfg :: IO (SpockCfg () () ())
+createSpockCfg = do
+    defaultConf <- defaultSpockCfg () PCNoDatabase ()
+    let cfg = defaultConf { spc_maxRequestSize = Just 512000
+                          , spc_errorHandler   = errHandler
+                          , spc_logError       = errLogger
+                          , spc_csrfProtection = True
+                          , spc_csrfHeaderName = "x-requested-with"
+                          , spc_csrfPostName   = "x-csrf-token"
+                          }
+    return cfg
   where
+    errLogger :: Text -> IO()
     errLogger _ = return ()
+    errHandler :: Http.Status -> ActionCtxT () IO ()
     errHandler status@(Http.Status code message)
         | status == Http.notFound404  = text "Not Found 404"
         | otherwise                   = text "error"
+
+main :: IO ()
+main = do
+    cfg <- createSpockCfg
+    runSpock 3000 $ spock cfg app
+  where
     app :: SpockM () () () ()
     app = do
         middleware $ staticPolicy (addBase "static")
