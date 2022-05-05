@@ -13,3 +13,7 @@ import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 handler :: SpockM () () () ()
 handler = do
     middleware logStdoutDev
+
+    get ("hello" <//> var) $
+        \name -> do
+            text ("Hello " <> name)
