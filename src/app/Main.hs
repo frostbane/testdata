@@ -11,17 +11,12 @@ import Server.Controllers as Controllers
 import Web.Spock hiding (head)
 import Network.Wai
 
-loadConfigHook :: IO ()
-loadConfigHook = return ()
-
-loadControllerHook :: IO ()
-loadControllerHook = Server.stat
 
 app :: IO Middleware
 app = do
-    conf     <- Server.getSpockConfig Controllers.errorLog Controllers.error loadConfigHook
-    handlers <- Server.getControllers loadControllerHook
-    spock conf $ foldl1 (>>) handlers
+    conf     <- Server.getSpockConfig Controllers.errorLog Controllers.error
+    handlers <- Server.getControllers
+    (spock conf $ (foldl1 (>>) $ handlers)) <* Server.stat
 
 main :: IO ()
 main = do

@@ -12,15 +12,15 @@ import Prelude hiding (putStrLn)
 import qualified Prelude (putStrLn)
 import System.Environment (getProgName)
 import System.IO
-    ( hSetEncoding,
-      stdin,
-      stdout,
-      utf8,
-      IOMode (ReadMode, WriteMode),
+    ( hSetEncoding
+    , stdin
+    , stdout
+    , utf8
+    , IOMode (ReadMode, WriteMode)
     )
 import Data.Typeable
-    ( typeOf,
-      Typeable,
+    ( typeOf
+    , Typeable
     )
 import qualified Data.Text as T
 import Data.Text.IO (hPutStrLn)

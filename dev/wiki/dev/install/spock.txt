@@ -1,0 +1,60 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.6
+
+====== spock setup ======
+
+stack.yaml
+
+'''
+resolver : lts-18.3
+
+extra-deps :
+  - Spock-0.14.0.0
+  - Spock-core-0.14.0.0
+  - reroute-0.6.0.0
+  - stm-containers-1.2
+  - focus-1.0.1.4
+  - stm-hamt-1.2.0.7
+  - primitive-extras-0.10.1.4
+  - primitive-unlifted-0.1.3.1
+
+'''
+
+package.yaml
+
+'''
+dependencies:
+- base >= 4.7 && < 5
+- Spock
+- Spock-core
+- reroute
+- stm-containers
+- focus
+- stm-hamt
+- primitive-extras
+- primitive-unlifted
+- http-types
+- text
+- mtl
+- path-pieces
+- stache
+'''
+
+app/Main.hs
+
+'''
+module Main where
+
+import Lib
+import Web.Spock
+import Web.Spock.Config
+
+main :: IO ()
+main = do
+    cfg <- defaultSpockCfg () PCNoDatabase ()
+    runSpock 8080 $ spock cfg app
+  where
+    app :: SpockM () () () ()
+    app = return ()
+'''
+

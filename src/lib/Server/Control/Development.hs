@@ -7,8 +7,10 @@ module Server.Control.Development
     ) where
 
 import Fb.Lucid
-import Server.Types ( Controller
-                    , Session)
+import Server.Types
+    ( Controller
+    , Session
+    )
 import Web.Spock
 import Web.Spock.Lucid (lucid)
 import Lucid
@@ -19,8 +21,10 @@ import Data.Text as T
 import Data.Text (Text)
 import Network.Wai.Middleware.Static
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
-import Data.Typeable ( typeOf
-                     , Typeable)
+import Data.Typeable
+    ( typeOf
+    , Typeable
+    )
 
 
 getTypeOfLn :: (Typeable a) => a -> Text

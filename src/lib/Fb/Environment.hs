@@ -8,20 +8,23 @@ module Fb.Environment
     ) where
 
 import Prelude
-import System.Environment ( setEnv
-                          , lookupEnv
-                          )
-import System.IO ( openFile
-                 , hGetLine
-                 , hClose
-                 , hIsEOF
-                 , Handle
-                 , IOMode (ReadMode)
-                 )
-import Control.Exception ( try
-                         , SomeException
-                         , displayException
-                         )
+import System.Environment
+    ( setEnv
+    , lookupEnv
+    )
+import System.IO
+    ( openFile
+    , hGetLine
+    , hClose
+    , hIsEOF
+    , Handle
+    , IOMode (ReadMode)
+    )
+import Control.Exception
+    ( try
+    , SomeException
+    , displayException
+    )
 import qualified Data.Text as T
 import Data.Text (Text)
 import Data.List
@@ -67,7 +70,7 @@ loadEnv env = do
         Right handle -> hClose =<< parseEnv handle
         _            -> return ()
 
-{-| get environment variable value or use default if not foun
+{-| get environment variable value or use the default if not found
 
     environment key is case sensitived
     -}

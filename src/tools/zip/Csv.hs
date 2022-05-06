@@ -9,29 +9,28 @@
 
 
 module Csv
-    ( checkFileExist,
-      openCsvFile,
-      closeCsvFile,
-      parse,
-      splitLine,
-      showRes,
-      showResName,
-    )
-  where
+    ( checkFileExist
+    , openCsvFile
+    , closeCsvFile
+    , parse
+    , splitLine
+    , showRes
+    , showResName
+    ) where
 
 
 import System.Directory
-    ( getCurrentDirectory,
-      getDirectoryContents,
-      doesFileExist,
+    ( getCurrentDirectory
+    , getDirectoryContents
+    , doesFileExist
     )
 import System.IO
-    ( openFile,
-      hGetLine,
-      hClose,
-      hIsEOF,
-      Handle,
-      IOMode (ReadMode, WriteMode),
+    ( openFile
+    , hGetLine
+    , hClose
+    , hIsEOF
+    , Handle
+    , IOMode (ReadMode, WriteMode)
     )
 import Data.Typeable (typeOf)
 import qualified Data.Text as T
@@ -39,27 +38,27 @@ import Data.Text (Text)
 import Data.Text.IO (hPutStrLn)
 import Data.Text.Lazy (fromStrict)
 import Data.Text.Lazy.Encoding
-    ( decodeUtf8,
-      encodeUtf8,
+    ( decodeUtf8
+    , encodeUtf8
     )
 import Data.Function
 import Control.Monad
-    ( liftM,
-      mzero,
+    ( liftM
+    , mzero
     )
 import Control.Monad.IO.Class (liftIO)
 import Control.Exception
-    ( try,
-      SomeException,
-      displayException,
+    ( try
+    , SomeException
+    , displayException
     )
 import qualified Data.Vector as V
 import Data.Vector (Vector)
 import Data.Csv
 import qualified Data.ByteString.Lazy as BL
 import Data.Typeable
-    ( typeOf,
-      Typeable,
+    ( typeOf
+    , Typeable
     )
 
 {- | Check if the file exists

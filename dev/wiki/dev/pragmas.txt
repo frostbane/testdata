@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.6
+
+'''
+{-# LANGUAGE EmptyDataDecls        #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE RecordWildCards       #-}
+{-# LANGUAGE ExtendedDefaultRules  #-}
+{-# LANGUAGE BangPatterns          #-}
+{-# LANGUAGE UnboxedTuples         #-} -- for unboxed tuples (# a, b #)
+{-# LANGUAGE TupleSections         #-} -- then (,b) == \a -> (a, b)
+{-# LANGUAGE ViewPatterns          #-} -- for abstract type pattern matching
+
+
+{-# LANGUAGE MultiWayIf                 #-}
+{-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE QuasiQuotes                #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE PartialTypeSignatures      #-}
+{-# LANGUAGE BlockArguments             #-} -- for removing $ do
+'''
+

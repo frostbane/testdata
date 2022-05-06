@@ -37,11 +37,10 @@ stat = putStrLn =<< getEnvironment
 getSpockConfig :: ()
                => (Text -> IO())
                -> (Http.Status -> ActionCtxT () IO ())
-               -> IO ()
                -> IO _ -- IO (SpockCfg () (a -> IO(SessionCfg () a ())) ())
-getSpockConfig errLogger errHandler hook = do
+getSpockConfig errLogger errHandler = do
 --     let sess = defaultSessionCfg
-    ref <- newIORef M.empty
+    ref  <- newIORef M.empty
     sess <- newIORef M.empty
     defaultConf <- defaultSpockCfg sess PCNoDatabase (State ref)
     let cfg = defaultConf { spc_maxRequestSize = Just 512000
@@ -51,13 +50,11 @@ getSpockConfig errLogger errHandler hook = do
                           , spc_csrfHeaderName = "x-requested-with"
                           , spc_csrfPostName   = "x-csrf-token"
                           }
-    hook
     return cfg
 
 getControllers :: ()
-               => IO ()
-               -> IO [Controller]
-getControllers hook = do
+               => IO [Controller]
+getControllers = do
     env <- getEnvironment
     let app = [ Controllers.static
               , Controllers.basic
@@ -65,7 +62,6 @@ getControllers hook = do
     let extra = if | env == "development" -> [Controllers.development]
                    | env == "staging"     -> []
                    | otherwise            -> []
-    hook
     return $ app ++ extra
 
 {- | get port from environment or the default 80 if it is not set

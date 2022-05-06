@@ -8,12 +8,10 @@
 
 
 module Arguments
-    ( getArguments,
-      normalizeArguments,
-      get1stArgument,
-
-    )
-  where
+    ( getArguments
+    , normalizeArguments
+    , get1stArgument
+    ) where
 
 
 import System.Environment (getArgs)
