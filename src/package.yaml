@@ -24,6 +24,7 @@ dependencies:
 - Spock
 - Spock-core
 - reroute
+- containers
 - stm-containers
 - focus
 - stm-hamt

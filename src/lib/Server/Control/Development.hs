@@ -4,13 +4,14 @@ module Server.Control.Development
     ( handler
     ) where
 
+import Server.Types (Controller, Session)
 import Web.Spock
 import Network.Wai.Middleware.Static
 import Data.Text (Text)
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 
 
-handler :: SpockM () () () ()
+handler :: Controller
 handler = do
     middleware logStdoutDev
 
