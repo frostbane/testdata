@@ -12,7 +12,7 @@ import Data.Text (Text)
 
 
 newtype State = State
-   { session :: Session
+   { _session :: Session
    }
 
 type Controller = SpockM () Session State ()

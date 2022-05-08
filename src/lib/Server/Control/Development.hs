@@ -44,7 +44,7 @@ handler = do
     get "session" $ do
         sessId  <- getSessionId
         sessRef <- readSession
-        sess    <- (liftIO . readIORef . session) =<< getState
+        sess    <- (liftIO . readIORef . _session) =<< getState
 
         lucid do
             h4_ "session id"
