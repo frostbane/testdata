@@ -13,6 +13,7 @@ module Server
     , getHttpPort
     , Controller
     , Session
+    , createInitialSession
     ) where
 
 import Fb.Environment
@@ -39,10 +40,9 @@ getSpockConfig :: ()
                -> (Http.Status -> ActionCtxT () IO ())
                -> IO _ -- IO (SpockCfg () (a -> IO(SessionCfg () a ())) ())
 getSpockConfig errLogger errHandler = do
---     let sess = defaultSessionCfg
-    ref  <- newIORef M.empty
-    sess <- newIORef M.empty
-    defaultConf <- defaultSpockCfg sess PCNoDatabase (State ref)
+    sess <- createInitialSession
+    st   <- pure $ State sess
+    defaultConf <- defaultSpockCfg sess PCNoDatabase st
     let cfg = defaultConf { spc_maxRequestSize = Just 512000
                           , spc_errorHandler   = errHandler
                           , spc_logError       = errLogger
@@ -72,4 +72,13 @@ getHttpPort :: IO Int
 getHttpPort = getEnvDefault "HTTP_PORT" 80
 
 getEnvironment :: IO String
-getEnvironment = getEnvDefault "ENVIRONMENT" ("production" :: String)
+getEnvironment = getEnvDefault "ENVIRONMENT" "production"
+
+createInitialSession :: IO Session
+createInitialSession = newIORef $ M.fromList state
+  where
+    state =
+      [ ("id", "1")
+      , ("name", "testdata")
+      ]
+

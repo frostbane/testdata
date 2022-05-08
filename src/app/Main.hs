@@ -16,7 +16,7 @@ app :: IO Middleware
 app = do
     conf     <- Server.getSpockConfig Controllers.errorLog Controllers.error
     handlers <- Server.getControllers
-    (spock conf $ (foldl1 (>>) $ handlers)) <* Server.stat
+    (spock conf $ foldl1 (>>) handlers) <* Server.stat
 
 main :: IO ()
 main = do

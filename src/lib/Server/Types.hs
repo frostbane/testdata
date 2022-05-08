@@ -1,11 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE MultiWayIf #-}
-{-# LANGUAGE PartialTypeSignatures #-}
-
 module Server.Types
     ( Controller
     , Session
-    , State (State)
+    , State (..)
     ) where
 
 import Web.Spock
@@ -16,8 +12,10 @@ import Data.Text (Text)
 
 
 newtype State = State
-   { st :: IORef (Map Text Text)
+   { session :: Session
    }
 
 type Controller = SpockM () Session State ()
+
 type Session = IORef (Map Text Text)
+
