@@ -19,6 +19,7 @@ module Server
 import Fb.Environment
 import Server.Controllers as Controllers
 import Server.Types (Controller, Session, State(..))
+import Database
 import Web.Spock
 import Web.Spock.Config
 import Data.Map as M
@@ -42,7 +43,8 @@ getSpockConfig :: ()
 getSpockConfig errLogger errHandler = do
     sess <- createInitialSession
     st   <- pure $ State sess
-    defaultConf <- defaultSpockCfg sess PCNoDatabase st
+    db   <- createDatabaseConnection
+    defaultConf <- defaultSpockCfg sess db st
     let cfg = defaultConf { spc_maxRequestSize = Just 512000
                           , spc_errorHandler   = errHandler
                           , spc_logError       = errLogger
