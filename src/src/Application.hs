@@ -21,8 +21,12 @@ module Application
     ) where
 
 import Control.Monad.Logger                 (liftLoc, runLoggingT)
-import Database.Persist.Postgresql          (createPostgresqlPool, pgConnStr,
-                                             pgPoolSize, runSqlPool)
+import Database.Persist.Postgresql          (    createPostgresqlPool
+                                               , pgConnStr
+                                               , pgPoolSize
+                                               , runSqlPool
+                                               , rawExecute
+                                             )
 import Import
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.HTTP.Client.TLS              (getGlobalManager)
@@ -37,6 +41,7 @@ import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              mkRequestLogger, outputFormat)
 import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
                                              toLogStr)
+import Data.Text.Encoding
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -82,6 +87,8 @@ makeFoundation appSettings = do
         (pgPoolSize $ appDatabaseConf appSettings)
 
     -- Perform database migration using our application's logging settings.
+    dbMigrationsSql <- readFile "config/migrations/00-db_migrations.sql"
+    runLoggingT (runSqlPool (rawExecute (Data.Text.Encoding.decodeUtf8 dbMigrationsSql) []) pool ) logFunc
     runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
 
     -- Return the foundation
